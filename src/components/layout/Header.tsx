@@ -3,14 +3,18 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { MODE_COPY } from "@/data/copy";
+import { SKINS, SKIN_ORDER } from "@/data/skins";
 import { useDecisionStore } from "@/stores/decision-store";
+import { useSkinStore } from "@/stores/skin-store";
 
 export function Header() {
   const mode = useDecisionStore((s) => s.mode);
   const history = useDecisionStore((s) => s.history);
   const clear = useDecisionStore((s) => s.clearHistory);
-  const [panel, setPanel] = useState<"history" | "about" | null>(null);
-  const toggle = (p: "history" | "about") => setPanel((cur) => (cur === p ? null : p));
+  const skin = useSkinStore((s) => s.skin);
+  const setSkin = useSkinStore((s) => s.setSkin);
+  const [panel, setPanel] = useState<"history" | "about" | "skin" | null>(null);
+  const toggle = (p: "history" | "about" | "skin") => setPanel((cur) => (cur === p ? null : p));
 
   return (
     <header className="header">
@@ -19,6 +23,9 @@ export function Header() {
         <span className="brand__tag">A RANDOM LIFE MACHINE · VOL.01</span>
       </div>
       <nav className="nav" aria-label="次要导航">
+        <button type="button" className="nav__btn" aria-expanded={panel === "skin"} onClick={() => toggle("skin")}>
+          皮肤
+        </button>
         <button type="button" className="nav__btn" aria-expanded={panel === "history"} onClick={() => toggle("history")}>
           历史
         </button>
@@ -36,7 +43,30 @@ export function Header() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
           >
-            {panel === "history" ? (
+            {panel === "skin" ? (
+              <>
+                <div className="popover__head">
+                  <strong>换一身皮肤</strong>
+                </div>
+                <ul className="skins">
+                  {SKIN_ORDER.map((id) => (
+                    <li key={id}>
+                      <button type="button" className="skin-opt" aria-pressed={skin === id} onClick={() => setSkin(id)}>
+                        <span className="skin-opt__sw" aria-hidden>
+                          {SKINS[id].swatch.map((c) => (
+                            <i key={c} style={{ background: c }} />
+                          ))}
+                        </span>
+                        <span>
+                          <span className="skin-opt__name">{SKINS[id].name}</span>
+                          <span className="skin-opt__blurb">{SKINS[id].blurb}</span>
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : panel === "history" ? (
               <>
                 <div className="popover__head">
                   <strong>最近的天意</strong>

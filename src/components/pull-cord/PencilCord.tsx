@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { canPull, useDecisionStore } from "@/stores/decision-store";
+import { SKINS } from "@/data/skins";
+import { useSkinStore } from "@/stores/skin-store";
 import { CordEngine } from "./engine";
 
 /** 绳子旁的手写批注：随阶段变化，拖拽中隐藏。 */
@@ -25,6 +27,7 @@ export default function PencilCord({ reducedMotion, mapMode = false }: { reduced
   const hasResult = useDecisionStore((s) => s.categoryId !== null) && !mapMode;
   const phase = useDecisionStore((s) => s.phase);
   const armed = useDecisionStore((s) => s.armed);
+  const skin = useSkinStore((s) => s.skin);
 
   useEffect(() => {
     const canvas = ref.current!;
@@ -35,6 +38,7 @@ export default function PencilCord({ reducedMotion, mapMode = false }: { reduced
       onArmed: (a) => useDecisionStore.getState().setArmed(a),
     });
     engine.current = e;
+    e.setSkin(SKINS[useSkinStore.getState().skin]);
 
     const fit = () => {
       const r = canvas.getBoundingClientRect();
@@ -59,6 +63,10 @@ export default function PencilCord({ reducedMotion, mapMode = false }: { reduced
       engine.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    engine.current?.setSkin(SKINS[skin]);
+  }, [skin]);
 
   useEffect(() => {
     engine.current?.setOptions({ reducedMotion, hasResult, label: mapMode ? (armed ? "松手！" : null) : labelFor(phase, armed) });

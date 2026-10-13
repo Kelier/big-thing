@@ -21,6 +21,7 @@ function Scribble() {
 export function DecisionStage({ reducedMotion }: { reducedMotion: boolean }) {
   const mode = useDecisionStore((s) => s.mode);
   const phase = useDecisionStore((s) => s.phase);
+  const returnPhase = useDecisionStore((s) => s.returnPhase);
   const armed = useDecisionStore((s) => s.armed);
   const categoryId = useDecisionStore((s) => s.categoryId);
   const placeId = useDecisionStore((s) => s.placeId);
@@ -59,11 +60,15 @@ export function DecisionStage({ reducedMotion }: { reducedMotion: boolean }) {
     return () => void root.style.removeProperty("--tint");
   }, [category, phase]);
 
+  // 按住拖动 / 刚松手的那段时间，内容保持上一个稳定阶段的样子：
+  // 否则按下瞬间卡片被卸载、文字块整体掉到底部，是一次大重排，正好撞在手指刚按下去的那一帧
+  const stable = phase === "dragging" || phase === "releasing" ? returnPhase : phase;
   const showIntro = !category || phase === "dragging" || phase === "releasing";
   const draggingFromResult = (phase === "dragging" || phase === "releasing") && !!category;
 
   return (
     <section className={`copy${mode === "explore" ? " copy--map" : ""}`} aria-label="决定区域">
+      <div className="copy__body">
       <AnimatePresence mode="wait">
         {showIntro && !draggingFromResult ? (
           <motion.div
@@ -151,7 +156,7 @@ export function DecisionStage({ reducedMotion }: { reducedMotion: boolean }) {
                   </button>
                 </div>
 
-                {phase === "cuisineSelected" && (
+                {stable === "cuisineSelected" && (
                   <div className="again">
                     <p className="sr-only" aria-live="polite">{armed ? PULL_HINTS.armed : PULL_HINTS.retry}</p>
                     <button type="button" className="btn btn--primary" onClick={requestPull}>
@@ -168,7 +173,7 @@ export function DecisionStage({ reducedMotion }: { reducedMotion: boolean }) {
                   </div>
                 )}
 
-                {phase === "restaurantSelected" && place && (
+                {stable === "restaurantSelected" && place && (
                   <RestaurantCard
                     place={place}
                     category={category}
@@ -183,6 +188,7 @@ export function DecisionStage({ reducedMotion }: { reducedMotion: boolean }) {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </section>
   );
 }

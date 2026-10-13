@@ -10,7 +10,9 @@ import PencilCord from "@/components/pull-cord/PencilCord";
 const MapView = dynamic(() => import("@/components/map/MapView"), { ssr: false });
 import { useReducedMotion } from "@/lib/hooks";
 import { useDecisionStore } from "@/stores/decision-store";
-import { useSkinStore } from "@/stores/skin-store";
+import { CordLabel } from "@/components/pull-cord/CordLabel";
+import { PerfHud } from "@/components/pull-cord/PerfHud";
+import { useApplySkin, useSkinId } from "@/lib/skin";
 
 export function Experience() {
   const reduced = useReducedMotion();
@@ -18,7 +20,7 @@ export function Experience() {
   const mapMode = useDecisionStore((s) => s.mode) === "explore";
   const [impact, setImpact] = useState(false);
 
-  useEffect(() => useSkinStore.getState().restore(), []);
+  useApplySkin(useSkinId());
 
   // 抽取瞬间的轻微冲击
   useEffect(() => {
@@ -37,6 +39,8 @@ export function Experience() {
       <div className="stage-canvas">
         <PencilCord reducedMotion={reduced} mapMode={mapMode} />
       </div>
+      <CordLabel />
+      <PerfHud />
       <Header />
       <DecisionStage reducedMotion={reduced} />
       <ModeSwitcher />

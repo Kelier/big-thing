@@ -13,20 +13,20 @@
 }
 
 :root {
-  /* 默认皮肤：夜市烧烤。其余见下方 [data-skin] */
-  --paper: #f8e9c4;
-  --paper-2: #f1d9a0;
-  --paper-hi: #fdf3d6;
-  --paper-rgb: 248, 233, 196;
-  --card: #fff8e4;
-  --card-2: #fffaec;
-  --card-rgb: 255, 248, 228;
-  --red: #d63a1f;
-  --red-rgb: 214, 58, 31;
-  --ink: #3b2214;
-  --ink-rgb: 59, 34, 20;
-  --tape: rgba(224, 164, 80, 0.72);
-  --lime: #ffae00;
+  /* 默认皮肤：煎蛋。其余见下方 [data-skin] */
+  --paper: #fff3c4;
+  --paper-2: #ffe08a;
+  --paper-hi: #fffbe6;
+  --paper-rgb: 255, 243, 196;
+  --card: #fffdf2;
+  --card-2: #fffef8;
+  --card-rgb: 255, 253, 242;
+  --red: #ee7b14;
+  --red-rgb: 238, 123, 20;
+  --ink: #4a2c14;
+  --ink-rgb: 74, 44, 20;
+  --tape: rgba(255, 170, 40, 0.55);
+  --lime: #ff8228;
   --tint: transparent;
   --pad: clamp(24px, 5vw, 80px);
   --font-serif: "WTE Serif", "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
@@ -37,22 +37,41 @@
 }
 
 /* ---------- 皮肤 ---------- */
-:root[data-skin="cha"] {
-  --paper: #cfe8dc; --paper-2: #b4d8c8; --paper-hi: #e3f3ea; --paper-rgb: 207, 232, 220;
-  --card: #fffbf0; --card-2: #fffdf6; --card-rgb: 255, 251, 240;
-  --red: #e8402a; --red-rgb: 232, 64, 42;
-  --ink: #1f3a36; --ink-rgb: 31, 58, 54;
-  --tape: rgba(255, 251, 240, 0.78); --lime: #fff4aa;
+:root[data-skin="water"] {
+  --paper: #e4f3fb; --paper-2: #cbe6f5; --paper-hi: #f3fbff; --paper-rgb: 228, 243, 251;
+  --card: #fbfeff; --card-2: #fdffff; --card-rgb: 251, 254, 255;
+  --red: #1f8fe0; --red-rgb: 31, 143, 224;
+  --ink: #0f3550; --ink-rgb: 15, 53, 80;
+  --tape: rgba(150, 210, 245, 0.6); --lime: #5ac8ff;
 }
-:root[data-skin="egg"] {
-  --paper: #fff0b8; --paper-2: #fddf8a; --paper-hi: #fff8d6; --paper-rgb: 255, 240, 184;
-  --card: #fffbe8; --card-2: #fffdf0; --card-rgb: 255, 251, 232;
-  --red: #f28a1a; --red-rgb: 242, 138, 26;
-  --ink: #4a2c14; --ink-rgb: 74, 44, 20;
-  --tape: rgba(255, 170, 40, 0.55); --lime: #ff8228;
+:root[data-skin="poop"] {
+  --paper: #f3e2c3; --paper-2: #e6cf9f; --paper-hi: #fbf1dc; --paper-rgb: 243, 226, 195;
+  --card: #fdf6e6; --card-2: #fffaf0; --card-rgb: 253, 246, 230;
+  --red: #b9531c; --red-rgb: 185, 83, 28;
+  --ink: #3a2314; --ink-rgb: 58, 35, 20;
+  --tape: rgba(206, 158, 98, 0.6); --lime: #ffc83c;
+}
+:root[data-skin="compass"] {
+  --paper: #ece4cf; --paper-2: #d9ccab; --paper-hi: #f7f1e1; --paper-rgb: 236, 228, 207;
+  --card: #fbf7ea; --card-2: #fdfaf0; --card-rgb: 251, 247, 234;
+  --red: #c8553d; --red-rgb: 200, 85, 61;
+  --ink: #23394a; --ink-rgb: 35, 57, 74;
+  --tape: rgba(201, 160, 74, 0.55); --lime: #ffb43c;
+}
+:root[data-skin="pillow"] {
+  --paper: #efe9fb; --paper-2: #dcd2f3; --paper-hi: #faf7ff; --paper-rgb: 239, 233, 251;
+  --card: #fffcff; --card-2: #fffdff; --card-rgb: 255, 252, 255;
+  --red: #7c6ad6; --red-rgb: 124, 106, 214;
+  --ink: #3b3358; --ink-rgb: 59, 51, 88;
+  --tape: rgba(190, 170, 240, 0.55); --lime: #ffaad2;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+/* 按钮、标签、导航不要被选中，也不要弹长按菜单；点击不延迟 */
+button, a, .modebar, .nav, .chips, .seg, .pin, .map__btn, .cord-canvas {
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: manipulation;
+}
+.cord-canvas { touch-action: none; }
 html, body { height: 100%; }
 body {
   background: radial-gradient(120% 100% at 28% 18%, var(--paper-hi) 0%, var(--paper) 45%, var(--paper-2) 100%);
@@ -72,7 +91,7 @@ button:disabled { cursor: default; }
 body::after {
   content: "";
   position: fixed; inset: 0; pointer-events: none; z-index: 50;
-  opacity: 0.09; mix-blend-mode: multiply;
+  opacity: 0.09;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
@@ -91,8 +110,33 @@ body::after {
   border: 1.3px solid rgba(var(--ink-rgb), 0.38); border-radius: 3px;
   filter: url(#rough);
 }
-.stage-canvas { position: absolute; inset: 0; z-index: 1; }
+/* 拉绳 canvas：横向铺满（手柄能一路拖到屏幕边缘，不被裁切），纵向只盖住绳子活动的范围（不是整屏），
+   像素量比整屏小三分之一以上。地图模式贴右边，是一条窄带。批注是单独的 DOM（.cord-label） */
+.stage-canvas { position: absolute; top: 0; left: 0; right: 0; height: 64dvh; z-index: 1; }
+/* 拉绳与地图互相隔离：各自独立成合成层，布局/绘制失效不外溢；拖绳时地图引擎 0 次重绘（已实测） */
+.stage-canvas { contain: layout paint style; isolation: isolate; }
+.map { contain: layout style; isolation: isolate; }
+@media (min-width: 760px) { .stage-canvas { height: 86dvh; } }
 .cord-canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+/* 绳子静止后引擎休眠。不做持续动画（实测会让合成器空转，占一个核约 26%），
+   只每隔几秒由引擎加上 is-nudge，让 canvas 在合成层上晃一下，晃完页面重新完全静止 */
+.cord-canvas { transform-origin: 50% 0; }
+.cord-canvas.is-nudge { animation: cord-nudge 1.7s ease-in-out 1; will-change: transform; }
+@keyframes cord-nudge {
+  0% { transform: rotate(0); } 25% { transform: rotate(0.9deg); } 55% { transform: rotate(-0.6deg); }
+  80% { transform: rotate(0.25deg); } 100% { transform: rotate(0); }
+}
+.cord-label {
+  position: absolute; z-index: 12; pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
+  right: calc(30% + var(--half) + 14px); transform: translateY(-50%) rotate(-4deg);
+  display: flex; align-items: center; gap: 4px; flex-direction: row; color: rgba(var(--ink-rgb), 0.88);
+  font: 400 32px var(--font-hand); white-space: nowrap;
+}
+.cord-label.is-on { opacity: 1; }
+.cord-label__arrow { width: 52px; height: 24px; transform: scaleX(-1); flex-shrink: 0; }
+/* 窄屏批注在握把右侧：字号和箭头随屏宽缩放，375/360 宽的屏上也不会被右边缘截掉 */
+.cord-label.is-narrow { right: auto; left: calc(50% + var(--half) + 14px); transform: translateY(-50%) rotate(3deg); flex-direction: row-reverse; font-size: clamp(18px, 6.2vw, 26px); }
+.cord-label.is-narrow .cord-label__arrow { transform: none; width: clamp(26px, 8vw, 40px); }
 
 /* ---------- Header ---------- */
 .header {
@@ -169,7 +213,8 @@ body::after {
   font: 900 clamp(68px, 10vw, 140px) / 1.05 var(--font-serif); letter-spacing: -0.03em; min-height: 1.1em;
   white-space: nowrap; filter: url(#pencil);
 }
-.reveal-name.is-rolling { opacity: 0.4; }
+/* 滚动期间文字每几十毫秒换一次，别每次都重跑 feTurbulence 滤镜 */
+.reveal-name.is-rolling { opacity: 0.4; filter: none; }
 .reveal-name.is-locked { animation: lock 0.35s cubic-bezier(.2, 1.4, .4, 1); }
 @keyframes lock { from { transform: scale(0.95) rotate(-1deg); } to { transform: none; } }
 .scribble { position: absolute; left: -2%; bottom: 0.02em; width: 104%; height: 0.16em; overflow: visible; pointer-events: none; }
@@ -225,9 +270,28 @@ body::after {
 
 /* ---------- Mobile ---------- */
 @media (max-width: 759px) {
+  /* 背景色随菜系变化的过渡会让整屏重绘 0.7s，而且恰好发生在按下拉绳的那一刻：手机上直接切换 */
+  .tint { transition: none; }
+  /* 全屏纸面颗粒层要在整屏合成一次混合，手机上不值得：窄屏去掉 */
+  body::after { display: none; }
+  /* 大字的 feTurbulence 铅笔滤镜在手机上每次动画都重算，是最重的一项：窄屏直接关掉，纸面颗粒与手绘线条仍在 */
+  .title, .reveal-name { filter: none; }
   .frame { inset: 8px; }
   .header { height: 76px; }
+  /* 导航收紧，让出中间给绳子，不再压在按钮上 */
+  .nav { gap: 0; }
+  .nav__btn { padding: 8px 6px; font-size: 13.5px; letter-spacing: 0.04em; }
+  .nav__btn::after { left: 6px; right: 6px; }
+  /* 文案区：顶部留给绳子握把，内容多时在 body 里滚动，不再被顶出屏幕 */
   .copy { top: auto; bottom: calc(86px + var(--safe-b)); transform: none; left: 24px; right: 24px; width: auto; }
+  .copy__body {
+    max-height: calc(68dvh - 86px - var(--safe-b)); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
+    padding: 16px 12px 28px 0; margin-right: -12px;
+    /* 内容超出时底部渐隐，提示还能往下滑；末尾留白保证滑到底时卡片是完整的 */
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 26px), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 26px), transparent);
+  }
+  .copy__body::-webkit-scrollbar { display: none; }
   .title { font-size: 54px; flex-direction: row; flex-wrap: wrap; align-items: baseline; }
   .sub { margin-top: 12px; font-size: 24px; }
   .eyebrow { margin-bottom: 8px; font-size: 9.5px; }
@@ -235,16 +299,41 @@ body::after {
   .brand__tag { display: none; }
   .fine { display: none; }
   .btn { margin-top: 18px; height: 50px; }
-  .reveal-name { font-size: 62px; }
-  .verdict { margin-top: 8px; font-size: 21px; white-space: nowrap; }
+  /* 结果区的字号和间距随视口高度缩放：iPhone 加上浏览器工具栏后可视高度只有约 766px，
+     固定数值放不下商家卡片，会被切掉底部 */
+  .reveal-name { font-size: clamp(46px, 7.6dvh, 62px); }
+  .verdict { margin-top: 6px; font-size: clamp(17px, 2.6dvh, 21px); white-space: nowrap; }
   .quip { display: none; }
-  .controls { margin-top: 10px; gap: 16px; }
-  .card { margin-top: 20px; padding: 20px 20px 14px; max-width: none; }
-  .card__name { font-size: 26px; }
-  .card__meta { margin-top: 12px; padding-top: 10px; }
-  .card__actions .btn { margin-top: 12px; height: 44px; }
-  .card__note { margin-top: 10px; }
+  .controls { margin-top: clamp(4px, 1dvh, 10px); gap: 16px; }
+  .card { margin-top: clamp(12px, 2.2dvh, 20px); padding: clamp(14px, 2.3dvh, 20px) 18px clamp(8px, 1.4dvh, 14px); max-width: none; }
+  .card__area { font-size: 10.5px; }
+  .card__name { font-size: clamp(21px, 3.2dvh, 26px); margin-top: 4px; }
+  .card__sig { margin-top: 3px; font-size: 13px; }
+  .card__meta { margin-top: clamp(8px, 1.5dvh, 12px); padding-top: clamp(6px, 1.2dvh, 10px); gap: 28px; }
+  .card__meta dd { font-size: clamp(18px, 2.7dvh, 22px); margin-top: 1px; }
+  .card__actions { gap: 10px; }
+  .card__actions .btn { margin-top: clamp(8px, 1.4dvh, 12px); height: clamp(38px, 5.3dvh, 44px); padding: 0 20px; font-size: 14px; }
+  .card__note { margin-top: clamp(6px, 1dvh, 10px); font-size: 10.5px; }
   .card::after { transform: translate(6px, 7px); }
+}
+
+/* ---------- 矮屏手机（SE、小屏安卓、横屏）：整体收紧 ---------- */
+@media (max-width: 759px) and (max-height: 700px) {
+  .copy { padding-top: 12px; }
+  .title { font-size: 44px; }
+  .reveal-name { font-size: 42px; min-height: 0; }
+  .sub { font-size: 20px; margin-top: 8px; }
+  .verdict { font-size: 17px; margin-top: 2px; }
+  .controls { margin-top: 2px; gap: 12px; }
+  .seg__item { padding: 4px 8px; }
+  .btn { height: 44px; margin-top: 12px; }
+  .card { margin-top: 12px; padding: 12px 16px 6px; }
+  .card__name { font-size: 20px; }
+  .card__sig { margin-top: 2px; font-size: 13px; }
+  .card__meta { margin-top: 8px; padding-top: 6px; gap: 24px; }
+  .card__meta dd { font-size: 18px; margin-top: 0; }
+  .card__actions .btn { height: 38px; margin-top: 8px; font-size: 14px; }
+  .card__note { display: none; }
 }
 
 /* ---------- Mode bar: ROLL chips ---------- */
@@ -269,11 +358,8 @@ body::after {
 .map--failed { display: grid; place-content: center; text-align: center; gap: 8px; font: 400 24px var(--font-hand); opacity: 0.7; }
 .app--map .tint { z-index: 1; pointer-events: none; opacity: 0.18; }
 .app--map .frame { z-index: 30; }
-.app--map .stage-canvas { inset: 0 0 0 auto; width: 150px; z-index: 12; }
-.app--map .stage-canvas::before {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(90deg, rgba(var(--paper-rgb), 0) 0%, rgba(var(--paper-rgb), 0.82) 55%);
-}
+/* 绳子叠在地图和面板之上；去掉原来的渐变遮罩，改由引擎在绳子外圈垫纸色光晕 */
+.app--map .stage-canvas { left: auto; right: 0; width: 150px; height: 100%; z-index: 16; }
 .app--map .cord-canvas { position: relative; }
 .app--map .modebar { background: linear-gradient(0deg, rgba(var(--paper-rgb), 0.96) 55%, rgba(var(--paper-rgb), 0)); }
 .app--map .header { background: linear-gradient(180deg, rgba(var(--paper-rgb), 0.92) 40%, rgba(var(--paper-rgb), 0)); }
@@ -310,7 +396,7 @@ body::after {
 
 /* 图钉 */
 .pin { position: relative; width: 34px; height: 44px; padding: 0; animation: drop 0.5s cubic-bezier(.3, 1.5, .5, 1) var(--delay, 0ms) backwards; transition: transform 0.2s; }
-.pin svg { width: 100%; height: 100%; overflow: visible; filter: url(#rough) drop-shadow(0 3px 2px rgba(var(--ink-rgb), 0.3)); }
+.pin svg { width: 100%; height: 100%; overflow: visible; }
 .pin__body { fill: var(--card); stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
 .pin__dot { fill: var(--ink); }
 .pin:hover { transform: scale(1.12) rotate(-3deg); z-index: 4; }
@@ -331,13 +417,23 @@ body::after {
 .app--map .maplibregl-ctrl-bottom-right { right: 150px; bottom: 74px; }
 
 @media (max-width: 759px) {
-  .app--map .stage-canvas { width: 96px; }
+  .app--map .stage-canvas { width: 132px; }
+  /* 地图面板：外框固定，内部 body 滚动；底部渐隐提示还有内容 */
   .copy--map {
-    left: 12px; right: 100px; top: auto; bottom: calc(80px + var(--safe-b)); width: auto; max-height: 46dvh; padding: 14px 16px 16px;
+    left: 12px; right: 140px; top: auto; bottom: calc(80px + var(--safe-b)); width: auto; max-height: none; overflow: visible; padding: 0;
+  }
+  .copy--map .copy__body {
+    max-height: calc(60dvh - 24px); margin: 0; padding: 14px 16px 26px;
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 26px), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 26px), transparent);
   }
   .copy--map .title { font-size: 34px; }
   .copy--map .sub { font-size: 19px; margin-top: 8px; }
-  .copy--map .reveal-name { font-size: 44px; }
+  .copy--map .reveal-name { font-size: 36px; white-space: normal; line-height: 1.1; min-height: 0; }
+  .copy--map .verdict { font-size: 17px; margin-top: 6px; }
+  .copy--map .controls { margin-top: 8px; }
+  .copy--map .btn { padding: 0 16px; font-size: 14px; letter-spacing: 0.04em; white-space: nowrap; }
+  .copy--map .eyebrow { font-size: 9px; letter-spacing: 0.18em; }
   .copy--map .verdict { white-space: normal; font-size: 18px; }
   .copy--map .card { margin-top: 14px; padding: 14px 14px 10px; }
   .copy--map .card__name { font-size: 21px; }
@@ -345,8 +441,8 @@ body::after {
   .copy--map .card__meta dd { font-size: 18px; }
   .copy--map .card__actions .btn { height: 38px; padding: 0 16px; margin-top: 8px; font-size: 13px; }
   .copy--map .card__note { display: none; }
-  .map__tools { right: 108px; bottom: auto; top: 84px; }
-  .map__hint { font-size: 18px; bottom: calc(100px + var(--safe-b)); white-space: normal; text-align: center; width: 60%; }
+  .map__tools { right: 144px; bottom: auto; top: 84px; }
+  .map__hint { display: none; } /* 窄屏下面板里已有同样的引导，提示条只会从面板后面透出来 */
   .modebar { gap: 14px; padding-right: 12px; }
   .modebar__group { gap: 6px; }
   .chips { gap: 0; }
@@ -357,17 +453,3 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; animation-delay: 0s !important; }
 }
-
-/* ---------- 皮肤切换面板 ---------- */
-.skins { list-style: none; display: grid; gap: 6px; }
-.skin-opt {
-  width: 100%; display: flex; align-items: center; gap: 12px; padding: 9px 10px; text-align: left;
-  border: 1.3px dashed transparent; border-radius: 3px; transition: border-color 0.15s, background 0.15s;
-}
-.skin-opt:hover { background: rgba(var(--ink-rgb), 0.05); }
-.skin-opt[aria-pressed="true"] { border-color: var(--ink); background: rgba(var(--red-rgb), 0.08); }
-.skin-opt__sw { display: flex; flex-shrink: 0; }
-.skin-opt__sw i { width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid var(--ink); margin-left: -4px; }
-.skin-opt__sw i:first-child { margin-left: 0; }
-.skin-opt__name { display: block; font-size: 14.5px; font-weight: 700; letter-spacing: 0.06em; }
-.skin-opt__blurb { display: block; margin-top: 2px; font-size: 12px; opacity: 0.6; }

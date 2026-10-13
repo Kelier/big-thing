@@ -7,7 +7,6 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { poi } from "@/services/poi-provider";
 import { useDecisionStore } from "@/stores/decision-store";
 maplibregl.setWorkerUrl("/vendor/maplibre-gl-worker.mjs");
-import { useSkinStore } from "@/stores/skin-store";
 import { loadSketchStyle } from "./sketch-style";
 
 const PIN_SVG = `<svg viewBox="0 0 34 44" aria-hidden><path class="pin__body" d="M17 41 C 9 30, 3 24, 4 15 C 5 7, 11 3, 17 3 C 24 3, 30 8, 30 15 C 31 24, 25 30, 17 41 Z"/><circle class="pin__dot" cx="17" cy="15" r="4.6"/></svg>`;
@@ -35,7 +34,6 @@ export default function MapView() {
   const searching = useDecisionStore((s) => s.searching);
   const result = useDecisionStore((s) => (s.categoryId ? s.placesByKey[`${s.mode}:${s.categoryId}`] : undefined));
   const places = result?.places;
-  const skin = useSkinStore((s) => s.skin);
   const tint = categoryId ? poi.findCategory(mode, categoryId)?.tint : undefined;
 
   // 初始化地图
@@ -45,8 +43,7 @@ export default function MapView() {
     let disposed = false;
     let m: MlMap | null = null;
     (async () => {
-      const skinId = useSkinStore.getState().skin;
-      const style = await loadSketchStyle(skinId);
+      const style = await loadSketchStyle("compass");
       if (disposed || !box.current) return;
       const loc = useDecisionStore.getState().userLoc;
       try {
@@ -56,6 +53,8 @@ export default function MapView() {
           center: loc ? [loc.lng, loc.lat] : [121.4737, 31.2304],
           zoom: 13,
           attributionControl: false,
+          // 3x 屏的 WebGL 画布像素是 2x 的 2.25 倍，封顶 2 省显存
+          pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
           localIdeographFontFamily: "'PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans SC',sans-serif",
           pitchWithRotate: false,
           dragRotate: false,
@@ -93,17 +92,6 @@ export default function MapView() {
       map.current = null;
     };
   }, []);
-
-  // 换皮肤：原地换样式，图钉和视角都保留
-  useEffect(() => {
-    const m = map.current;
-    if (!m) return;
-    let stale = false;
-    void loadSketchStyle(skin).then((style) => !stale && m.setStyle(style));
-    return () => {
-      stale = true;
-    };
-  }, [skin]);
 
   // “你在这”
   useEffect(() => {
@@ -151,7 +139,7 @@ export default function MapView() {
       const narrow = window.innerWidth < 760;
       m.fitBounds(b, {
         padding: narrow
-          ? { top: 90, bottom: Math.round(window.innerHeight * 0.5), left: 30, right: 90 }
+          ? { top: 90, bottom: Math.round(window.innerHeight * 0.62), left: 30, right: 150 }
           : { top: 100, bottom: 100, left: Math.min(520, window.innerWidth * 0.4) + 40, right: 180 },
         maxZoom: 15.5,
         duration: 900,

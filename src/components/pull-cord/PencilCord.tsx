@@ -1,33 +1,16 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { MODE_SKIN, SKINS } from "@/data/skins";
+import { useSkinId } from "@/lib/skin";
 import { canPull, useDecisionStore } from "@/stores/decision-store";
-import { SKINS } from "@/data/skins";
-import { useSkinStore } from "@/stores/skin-store";
 import { CordEngine } from "./engine";
-
-/** 绳子旁的手写批注：随阶段变化，拖拽中隐藏。 */
-function labelFor(phase: string, armed: boolean): string | null {
-  if (armed) return "松手！";
-  switch (phase) {
-    case "idle":
-      return "拉我！";
-    case "cuisineSelected":
-      return "再拉一次";
-    case "restaurantSelected":
-      return "换一家？";
-    default:
-      return null;
-  }
-}
 
 export default function PencilCord({ reducedMotion, mapMode = false }: { reducedMotion: boolean; mapMode?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const engine = useRef<CordEngine | null>(null);
   const hasResult = useDecisionStore((s) => s.categoryId !== null) && !mapMode;
-  const phase = useDecisionStore((s) => s.phase);
-  const armed = useDecisionStore((s) => s.armed);
-  const skin = useSkinStore((s) => s.skin);
+  const skinId = useSkinId();
 
   useEffect(() => {
     const canvas = ref.current!;
@@ -38,15 +21,23 @@ export default function PencilCord({ reducedMotion, mapMode = false }: { reduced
       onArmed: (a) => useDecisionStore.getState().setArmed(a),
     });
     engine.current = e;
-    e.setSkin(SKINS[useSkinStore.getState().skin]);
+    e.setSkin(SKINS[MODE_SKIN[useDecisionStore.getState().mode]]);
 
     const fit = () => {
-      const r = canvas.getBoundingClientRect();
-      e.resize(r.width, r.height, Math.min(window.devicePixelRatio || 1, 2));
+      // 用布局尺寸而不是 getBoundingClientRect：摆动时 canvas 带 CSS 旋转，外接矩形会变大
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      const narrow = window.innerWidth < 760;
+      // 吃喝拉睡：canvas 横向铺满、只盖住上半部（绳子活动的范围），手柄能一直拖到屏幕边；
+      // 地图模式：贴右的窄条。挂点：手机居中，桌面 70%
+      const mapNow = useDecisionStore.getState().mode === "explore";
+      e.setOptions({ narrow, anchor: mapNow ? 0.5 : narrow ? 0.5 : 0.7 });
+      e.resize(w, h, window.devicePixelRatio || 1, window.innerHeight);
     };
     fit();
     const ro = new ResizeObserver(fit);
     ro.observe(canvas);
+    window.addEventListener("resize", fit);
 
     // 外部“代拉”请求（按钮 / 无障碍）
     let last = useDecisionStore.getState().pullNonce;
@@ -59,18 +50,19 @@ export default function PencilCord({ reducedMotion, mapMode = false }: { reduced
     return () => {
       unsub();
       ro.disconnect();
+      window.removeEventListener("resize", fit);
       e.destroy();
       engine.current = null;
     };
   }, []);
 
   useEffect(() => {
-    engine.current?.setSkin(SKINS[skin]);
-  }, [skin]);
+    engine.current?.setSkin(SKINS[skinId]);
+  }, [skinId]);
 
   useEffect(() => {
-    engine.current?.setOptions({ reducedMotion, hasResult, label: mapMode ? (armed ? "松手！" : null) : labelFor(phase, armed) });
-  }, [reducedMotion, hasResult, phase, armed, mapMode]);
+    engine.current?.setOptions({ reducedMotion, hasResult, onMap: mapMode });
+  }, [reducedMotion, hasResult, mapMode]);
 
   return <canvas ref={ref} className="cord-canvas" aria-hidden />;
 }

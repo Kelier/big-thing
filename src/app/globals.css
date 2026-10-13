@@ -171,6 +171,10 @@ body::after {
   width: min(48vw, 640px); pointer-events: none;
 }
 .copy button, .copy a { pointer-events: auto; }
+/* 桌面端：文案区夹在顶栏与模式栏之间垂直居中；视口矮时靠按高度（dvh）收紧字号和间距，保证一屏放下，不滚动 */
+@media (min-width: 760px) {
+  .copy { top: 64px; bottom: calc(70px + var(--safe-b)); transform: none; display: flex; flex-direction: column; justify-content: center; }
+}
 .eyebrow { font: 500 11.5px var(--font-en); letter-spacing: 0.26em; opacity: 0.55; margin-bottom: 22px; text-transform: uppercase; }
 
 .title {
@@ -256,6 +260,35 @@ body::after {
 .card__actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .card__actions .btn { height: 46px; padding: 0 24px; font-size: 14.5px; margin-top: 18px; }
 .card__note { margin-top: 16px; font-size: 11px; opacity: 0.4; }
+
+@media (min-width: 760px) and (max-height: 860px) {
+  .copy { width: min(52vw, 640px); }
+  .eyebrow { margin-bottom: 8px; }
+  .title { font-size: clamp(44px, 11.5dvh, 96px); }
+  .sub { margin-top: 12px; font-size: clamp(20px, 3.6dvh, 28px); }
+  .btn { margin-top: 16px; height: 44px; }
+  .fine { margin-top: 8px; }
+  .reveal-name { font-size: clamp(44px, 10.5dvh, 100px); min-height: 0; }
+  .verdict { margin-top: 6px; font-size: clamp(20px, 3.6dvh, 30px); }
+  .quip { display: none; }
+  .controls { margin-top: 6px; gap: 18px; }
+  .seg__item { padding: 6px 10px; }
+  .again { margin-top: 0; }
+  .card { margin-top: 14px; padding: 16px 22px 10px; max-width: 520px; }
+  .card__name { font-size: clamp(20px, 3.8dvh, 28px); margin-top: 4px; }
+  .card__sig { margin-top: 2px; font-size: 13px; }
+  .card__meta { margin-top: 10px; padding-top: 8px; gap: 28px; }
+  .card__meta dd { font-size: 20px; margin-top: 1px; }
+  .card__actions .btn { margin-top: 10px; height: 38px; padding: 0 20px; font-size: 14px; }
+  .card__note { display: none; }
+}
+@media (min-width: 760px) and (max-height: 600px) {
+  .eyebrow { display: none; }
+  .result .eyebrow { display: none; }
+  .card { margin-top: 10px; padding: 12px 20px 8px; }
+  .card__meta { margin-top: 6px; padding-top: 6px; }
+  .card__actions .btn { margin-top: 8px; height: 34px; }
+}
 
 /* ---------- Mode bar ---------- */
 .modebar {
@@ -365,7 +398,7 @@ body::after {
 .app--map .header { background: linear-gradient(180deg, rgba(var(--paper-rgb), 0.92) 40%, rgba(var(--paper-rgb), 0)); }
 
 .copy--map {
-  left: 28px; top: 92px; transform: none; width: min(440px, 40vw); max-height: calc(100dvh - 92px - 88px - var(--safe-b));
+  left: 28px; top: 92px; bottom: auto; transform: none; display: block; width: min(440px, 40vw); max-height: calc(100dvh - 92px - 88px - var(--safe-b));
   overflow: auto; padding: 22px 26px 24px; background: rgba(var(--card-rgb), 0.94); border: 1.5px solid var(--ink); border-radius: 3px;
   box-shadow: 8px 9px 0 -4px rgba(var(--ink-rgb), 0.18), 0 24px 50px -28px rgba(var(--ink-rgb), 0.5); pointer-events: auto;
   z-index: 14;
